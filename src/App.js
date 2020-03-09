@@ -1,6 +1,67 @@
 import React, { Component } from 'react';
 import './App.css';
 
+/* const CreateCharacterContainer = () => {
+  const results = this.state.results;
+  return (
+    results.map(item => (
+      <div class="character-grid" key={item.id} data-name={item.name} data-species={item.species} data-location={item.location.name} data-gender={item.gender}>
+        <img className="character-poster" src={item.image} alt="character image"></img>{item.name}
+      </div>
+    ))
+    )
+} */
+// create simple components for the DOM elements: 
+// header, pagination, main container with characters and details sidebar, and footer
+const CreateHeader = () => {
+  return (<header id="main-header" className="header-main">
+    <nav id="main-nav">
+                <a class="logo">The Rick and Morty Characters</a>
+            </nav>
+  </header>)
+}
+
+const CreatePagination = () => {
+  return (
+    <div className="pagination">
+        <a id="home">home</a>
+        <a class="prev-page">prev</a>
+        <span>page </span><span class="current-page">1</span>
+        <a className="next-page">next</a>
+  </div>)
+}
+const CreateDetailsSidebar = () => {
+  return (
+    <div className="sidebar">
+      <p>Soy sidebar</p>
+    </div>
+  )
+}
+const CreateFooter = () => {
+  return <footer id="nav-footer"></footer>
+}
+const CreateMainContent = () =>{
+  
+/*   const {error, isLoaded, info, results} = this.state;
+  console.log("STATE", results, isLoaded, error) */
+  return(
+    <main id="main-content" className="content-main">
+          
+          <div id="character-container">
+          <section id="character-grid">
+          {/*  <CreateCharacterContainer results={results} /> */}
+          {/* {results.map(item => (
+            <div class="character-grid" key={item.id} data-name={item.name} data-species={item.species} data-location={item.location.name} data-gender={item.gender}>
+              <img className="character-poster" src={item.image} alt="character image"></img>{item.name}
+            </div>
+          ))} */}
+          </section>
+        </div>
+        <CreateDetailsSidebar />
+        </main>
+  )
+}
+
 class App extends Component{
   constructor(props){
     //refer to the parent class constructor
@@ -40,13 +101,14 @@ class App extends Component{
           isLoaded:true,
           error
         });
-      }
-    )
+      })
     }
+    
+
 
   render(){
     const {error, isLoaded, info, results} = this.state;
-    console.log("STATE",results, isLoaded, error)
+    //console.log("STATE", results, isLoaded, error)
     if (error) {
       return <div>Error: {error.message}</div>;
     } 
@@ -55,13 +117,13 @@ class App extends Component{
     }
     else {
       return (
-        <ul>
-          {results.map(item => (
-            <li key={item.id}>
-              {item.name}
-            </li>
-          ))}
-        </ul>
+        <div className="site-wrapper">
+          <CreateHeader />
+          <CreatePagination />
+          <CreateMainContent />
+          <CreateFooter />
+        </div>
+        
       )
     }
   }
