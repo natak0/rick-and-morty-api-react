@@ -72,8 +72,8 @@ class App extends Component{
           {/*  add components for the DOM */}
           <Header />
           <Pagination infoData={info}/>
-          <MainContent />
-          <CharacterGridContainer resultsData={results} />  
+          <MainContent resultsData={results}/>
+          {/* <CharacterGridContainer resultsData={results} />   */}
           <Footer />
         </div>
       )
