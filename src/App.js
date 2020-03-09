@@ -1,81 +1,14 @@
-import React, { Component } from 'react';
-import {ReactDOM} from 'react'
-import './App.css';
+import React, { Component } from 'react'
+import './App.css'
+import Header from './DOM/Header'
+import Pagination from './DOM/Pagination'
+import MainContent from './DOM/MainContent'
+import Footer from './DOM/Footer'
+import CharacterGridContainer from './DOM/CharacterGridContainer'
 
-/* const CreateCharacterContainer = () => {
-  const results = this.state.results;
-  return (
-    results.map(item => (
-      <div class="character-grid" key={item.id} data-name={item.name} data-species={item.species} data-location={item.location.name} data-gender={item.gender}>
-        <img className="character-poster" src={item.image} alt="character image"></img>{item.name}
-      </div>
-    ))
-    )
-} */
-// create simple components for the DOM elements: 
-// header, pagination, main container with characters and details sidebar, and footer
-const CreateHeader = () => {
-  return (<header id="main-header" className="header-main">
-    <nav id="main-nav">
-                <a className="logo">The Rick and Morty Characters</a>
-            </nav>
-  </header>)
-}
 
-const CreatePagination = (infoData) => {
-  //const next = infoData.infoData.next;
-  return (
-    <div className="pagination">
-        <a id="home">home</a>
-        <a className="prev-page">prev</a>
-        <span>page </span><span className="current-page">1</span>
-        <a  className="next-page">next</a>
-  </div>)
-}
-const CreateDetailsSidebar = () => {
-  return (
-    <div className="sidebar">
-      <p>Soy sidebar</p>
-    </div>
-  )
-}
-const CreateFooter = () => {
-  return <footer id="nav-footer"></footer>
-}
-const CreateMainContent = () =>{
-  
-/*   const {error, isLoaded, info, results} = this.state;
-  console.log("STATE", results, isLoaded, error) */
-  
-  return(
-    <main id="main-content" className="content-main">
-          
-          <div id="character-container">
-          <section id="character-grid">
-         
-          
-          </section>
-        </div>
-        <CreateDetailsSidebar />
-        </main>
-  )
-}
-const CreateCharacterContainer =(resultsData)=>{
 
-    //const {error, isLoaded, info, results} = this.state;
- 
-  console.log("resultsData", resultsData);
-  return (<div>{ resultsData.resultsData.map(item => (
-    <div className="character-grid" id={item.id} key={item.id} data-name={item.name} data-species={item.species} data-location={item.location.name} data-gender={item.gender}>
-      <img className="character-poster" src={item.image} alt="character image"></img>{item.name}
-    </div>
-  )) } </div>)
 
-    /* ReactDOM.render(
-      document.getElementById('1'),
-      document.getElementById('root')
-    ); */
-  } 
 
 
 
@@ -136,24 +69,16 @@ class App extends Component{
     else {
       return (
         <div className="site-wrapper">
-          <CreateHeader />
-          <CreatePagination infoData={info}/>
-          <CreateMainContent />
-{/*           {results.map(item => (
-            <div className="character-grid" key={item.id} data-name={item.name} data-species={item.species} data-location={item.location.name} data-gender={item.gender}>
-              <img className="character-poster" src={item.image} alt="character image"></img>{item.name}
-            </div>
-          ))} */}
-           <CreateCharacterContainer resultsData={results} />  
-         
-          <CreateFooter />
-
+          {/*  add components for the DOM */}
+          <Header />
+          <Pagination infoData={info}/>
+          <MainContent />
+          <CharacterGridContainer resultsData={results} />  
+          <Footer />
         </div>
-        
       )
     }
   }
-  //React.renderComponent(<p>rendertest</p>, document.getElementById('character-grid'))
 }
 
 export default App;
