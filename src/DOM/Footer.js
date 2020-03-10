@@ -1,6 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const Footer = () => {
-    return <footer id="nav-footer"></footer>
-  }
-export default Footer
+  return <footer id="nav-footer"></footer>
+}
+
+export default Footer;
