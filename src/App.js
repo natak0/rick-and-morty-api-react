@@ -18,9 +18,10 @@ constructor(props) {
     }
   }
 
+
   //load data from api immediately after a component is mounted/inserted into the tree 
   componentDidMount() {
-    const apiURL = "https://rickandmortyapi.com/api/character/?page=1";
+    const apiURL = "https://rickandmortyapi.com/api/character/?page=2";
     fetch(apiURL)
       .then(
         response => response.json())
