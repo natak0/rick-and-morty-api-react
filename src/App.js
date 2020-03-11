@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import './App.css';
 import Header from './DOM/Header';
 import Pagination from './DOM/Pagination';
-import MainContent from './DOM/MainContent';
 import Footer from './DOM/Footer';
+import DetailsSidebar from './DOM/DetailsSidebar';
+import CharacterGridContainer from './DOM/CharacterGridContainer';
 
 class App extends Component {
   constructor(props) {
@@ -64,7 +65,13 @@ class App extends Component {
           {/*  add components for the DOM */}
           <Header />
           <Pagination infoData={info}/>
-          <MainContent resultsData={results}/>
+          <main id="main-content" className="content-main">            
+            <div id="character-container">
+              <CharacterGridContainer resultsData={results} /> 
+            </div>
+            <DetailsSidebar />
+          </main>
+          {/* <MainContent resultsData={results}/> */}
           <Footer />
         </div>
       )
