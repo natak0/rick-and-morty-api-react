@@ -12,4 +12,4 @@ const Pagination = (infoData) => {
     </div>)
   }
 
-  export default Pagination;
+export default Pagination;

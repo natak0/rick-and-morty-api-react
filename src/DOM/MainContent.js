@@ -10,7 +10,7 @@ const MainContent = (resultsData) => {
                 <CharacterGridContainer resultsData={results} /> 
             </div>
             <DetailsSidebar />
-            </main>
+        </main>
       )
     }
 

@@ -2,7 +2,7 @@ import React from 'react';
 
 const CharacterGridContainer = (resultsData) => {
   return (
-    <section id = 'character-grid'> {
+    <section id='character-grid'> {
       resultsData.resultsData.map(item => (
         <div 
           className="character-grid"
