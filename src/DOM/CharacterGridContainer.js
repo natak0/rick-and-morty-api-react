@@ -1,8 +1,8 @@
 import React from 'react';
 import DetailsSidebar from './DetailsSidebar';
 
-
 const CharacterGridContainer = (resultsData) => {
+  
   //display the details of the clicked image
   const displayDetailsHandler = (index, imageUrl) => {
     console.log('display something', index, imageUrl)

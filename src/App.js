@@ -6,18 +6,17 @@ import MainContent from './DOM/MainContent';
 import Footer from './DOM/Footer';
 
 class App extends Component {
-constructor(props) {
-    //refer to the parent class constructor
-    super(props);
-    //use 'this' after parent call
-    this.state = {
-      error: null,
-      isLoaded: false,
-      info: [],
-      results: []
+  constructor(props) {
+      //refer to the parent class constructor
+      super(props);
+      //use 'this' after parent call
+      this.state = {
+        error: null,
+        isLoaded: false,
+        info: [],
+        results: []
+      }
     }
-  }
-
 
   //load data from api immediately after a component is mounted/inserted into the tree 
   componentDidMount() {
@@ -53,7 +52,6 @@ constructor(props) {
     
   render() {
     const {error, isLoaded, info, results} = this.state;
-    //console.log("STATE", results, isLoaded, error)
     if (error) {
       return <div>Error: {error.message}</div>;
     } 
