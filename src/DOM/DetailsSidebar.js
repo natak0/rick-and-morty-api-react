@@ -1,13 +1,14 @@
 import React from 'react';
 
-const DetailsSidebar = () => {
+const DetailsSidebar = (item) => {
+	console.log('details sidebar', item.image);
   return (
     <div className="sidebar">
       <p>Soy sidebar</p>
 				<img 
 					className="character-poster"
 					id="character-poster"
-          /* src={imageUrl} */
+          src={item.image}
           alt="character image">
       </img>
 		</div>

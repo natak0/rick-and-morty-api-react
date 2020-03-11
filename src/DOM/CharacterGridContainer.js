@@ -1,16 +1,8 @@
 import React from 'react';
 import DetailsSidebar from './DetailsSidebar';
 
-const CharacterGridContainer = (resultsData) => {
-  
-  //display the details of the clicked image
-  const displayDetailsHandler = (index, imageUrl) => {
-    console.log('display something', index, imageUrl)
-    return (
-      document.querySelector('#character-poster').src=imageUrl
-    )     
-  }
-  
+
+const CharacterGridContainer = (resultsData, updateFunction) => { 
   return (
     <section id='character-grid'> {
       resultsData.resultsData.map((item, index) => (
@@ -18,15 +10,15 @@ const CharacterGridContainer = (resultsData) => {
           className="character-grid"
           id={item.id}
           key={index}
-          data-name={item.name}
+         /*  data-name={item.name}
           data-species={item.species}
           data-location={item.location.name}
-          data-gender={item.gender}>
+          data-gender={item.gender} */>
           <img 
             className="character-poster"
             src={item.image}
             alt="character image"
-            onClick={() => displayDetailsHandler(item.id, item.image)}>
+            onClick={() => this.updateFunction(item.id, item)}>
           </img>
           {item.name}
         </div>
