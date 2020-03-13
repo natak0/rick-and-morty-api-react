@@ -1,7 +1,7 @@
 import React from 'react';
 
 const DetailsSidebar = (item) => {
-	console.log('details sidebar', item.image);
+	//console.log('details sidebar', item.image);
   return (
     <div className="sidebar">
       <p>Soy sidebar</p>
