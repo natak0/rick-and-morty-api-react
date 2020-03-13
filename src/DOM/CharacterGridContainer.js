@@ -1,52 +1,65 @@
 import React, { Component } from 'react';
-import Character from '../Components/Character'
-import DetailsSidebar from './DetailsSidebar';
+import Character from '../Components/Character/Character'
+import CharacterDetails from '../Components/CharacterDetails/CharacterDetails';
+//import CharacterDetails from '../Components/CharacterDetails';
 
 
-const CharacterGridContainer = (resultsData, {updateSidebar}) => { 
-
-  updateSidebar = item => {
-    //const { sidebar } = this.state.sidebar;
-    console.log("clicked", item);
-    return (
-    <Character item={item} />)
+class CharacterGridContainer extends Component { 
+  state = {
+    apiPageInfo: [],
+    characters: [],
+    selectedCharacter: [],
+    selectedCharacterId: null
   }
 
-  const characters = Array.from(resultsData.resultsData);
-      console.log('characters', characters);
+  componentDidMount () {
+    fetch('https://rickandmortyapi.com/api/character/')
+        .then(
+          response => response.json())
+        .then( result => {
+          console.log(result);
+          const characters = result.results;
+          //const apiPageInfo = result.info;
+          this.setState({ characters: characters});
+          //console.log(characters);
+        }
+      )
+    }
 
-  return (
+    characterSelectedHandler = ( id, character ) => {
+      console.log(id, character);
+      this.setState({selectedCharacterId:id, selectedCharacter:character})
+    }
     
-    <section id='character-grid'> {
-      
-      
-      /* characters.map((character, index) =>  {
-        return (<Character character={character.name}/>)
-      }) */
-      characters.map((item, index) => (
-        <div 
-          className="character-grid"
-          id={item.id}
-          key={index}
-          data-name={item.name}
-          data-species={item.species}
-          data-location={item.location.name}
-          data-gender={item.gender}>
-          <img 
-            className="character-poster"
-            src={item.image}
-            alt="character image"
-            onClick={() => updateSidebar(item)}>
-          </img>
-         {/*  <Character name={item.name} image={item.image} /> */}
-          {item.name}
-          
-        </div>
-      ))  
-    } */
-  }
-    </section>
-  )
-}  
+    render() {
+      const characters = this.state.characters.map((character) => {
+        return (
+          <Character
+            name={character.name}
+            status={character.state}
+            image={character.image}
+            clicked={() => this.characterSelectedHandler(character.id, character)}
+        /> 
+        )
+      }); 
+
+      return(
+        <main id="main-content" className="content-main"> 
+          <div id="character-container">
+            <section id="character-container-grid">
+              {characters}
+            </section> 
+          </div>
+          <div className="sidebar">
+            <div className="details">
+              <CharacterDetails 
+                id={this.state.selectedCharacterId} 
+                character={this.state.selectedCharacter}/>
+            </div>    
+          </div>
+        </main>
+      )
+    }
+}
 
 export default CharacterGridContainer;

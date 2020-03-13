@@ -1,16 +1,14 @@
 import React from 'react';
 
-const Character = ( props ) => (
-<div>
-     <h1>props name {props.name}</h1>
+const character = ( props ) => (
+<div className="character-grid" onClick={props.clicked}>
      <img 
             className="character-poster"
             src={props.image}
             alt="character image"
             >
-          </img>
-          </div>
+      </img>
+</div>
 )
-
-
-export default Character;
+ 
+export default character;

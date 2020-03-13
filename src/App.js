@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
-import Header from './DOM/Header';
-import Pagination from './DOM/Pagination';
-import Footer from './DOM/Footer';
-import DetailsSidebar from './DOM/DetailsSidebar';
-import CharacterGridContainer from './DOM/CharacterGridContainer';
-import Character from './Components/Character';
+import Header from './dom/Header';
+import Pagination from './dom/Pagination';
+import Footer from './dom/Footer';
+import CharacterGridContainer from './dom/CharacterGridContainer';
+//import Character from './Components/Character/Character';
 
 class App extends Component {
-  constructor(props) {
+/*   constructor(props) {
       //refer to the parent class constructor
       super(props);
       //this.updateSidebar=this.updateSidebar.bind(this);
@@ -47,12 +46,21 @@ class App extends Component {
           })
         }
       )
-  }
+  } */
     
 
 
   render() {
-    const {error, isLoaded, info, results} = this.state;
+    return (
+      <div className="site-wrapper">
+        <Header />
+        <Pagination />
+        <CharacterGridContainer />
+        <Footer />
+      </div>
+    )
+  }
+    /* const {error, isLoaded, info, results} = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } 
@@ -62,25 +70,21 @@ class App extends Component {
     else {
       return (
         <div className="site-wrapper">
-          {/*  add components for the DOM */}
           <Header />
           <Pagination infoData={info}/>
           <main id="main-content" className="content-main">            
             <div id="character-container">
               <CharacterGridContainer 
                 resultsData={ results} 
-                updateSidebar={this.updateSidebar} 
                 /> 
             </div>
             <Character />
-            {/* <DetailsSidebar item={results[0]}/> */}
           </main>
-          {/* <MainContent resultsData={results}/> */}
           <Footer />
-          
         </div>
       )
     }
-  }
+  } */
 }
+
 export default App;
