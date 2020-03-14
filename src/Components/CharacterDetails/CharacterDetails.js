@@ -5,9 +5,12 @@ class CharacterDetails extends Component {
   render() {
     let character = 
       <div className="character-details">
-      <p>Select a character</p>
+        <p>Select a character</p>
       </div>
-    if ( this.props.character ){
+
+    //if the character was clicked, display the details
+    if ( this.props.character.id ){
+      console.log(this.props.character.location.name);
       character = 
       <div className="character-details">
         <h1>{this.props.character.name}</h1>
@@ -15,12 +18,12 @@ class CharacterDetails extends Component {
             className="character-poster"
             id="character-poster"
             src={this.props.character.image}
-            alt="character image">
+            alt="character">
         </img>
-        <p>{this.props.character.gender}</p>
-        <p>{this.props.character.species}</p>
-        <p>{this.props.character.status}</p>
-       {/*  <p>{this.props.character.location}</p> */}
+        <p>Gender: {this.props.character.gender}</p>
+        <p>Species: {this.props.character.species}</p>
+        <p>Status: {this.props.character.status}</p>
+        <p>Location: {this.props.character.location.name}</p>
 		  </div>
     }
   return character;    
