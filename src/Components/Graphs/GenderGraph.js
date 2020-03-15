@@ -26,7 +26,7 @@ class GenderGraph extends Component {
       }]
     } 
     return (
-      <div>
+      <div className="genderGraph">
         <CanvasJSChart options = {options} />
       </div>
     ) 

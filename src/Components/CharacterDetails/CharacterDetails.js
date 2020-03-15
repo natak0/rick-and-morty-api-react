@@ -8,9 +8,8 @@ class CharacterDetails extends Component {
         <p>Select a character</p>
       </div>
 
-    //if the character was clicked, display the details
+    //if the character was clicked, display details of the clicked character
     if ( this.props.character.id ){
-      console.log(this.props.character.location.name);
       character = 
       <div className="character-details">
         <h1>{this.props.character.name}</h1>

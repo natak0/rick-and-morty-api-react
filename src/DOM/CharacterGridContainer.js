@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import Character from '../Components/Character/Character';
 import Pagination from './Pagination';
 import CharacterDetails from '../Components/CharacterDetails/CharacterDetails';
@@ -14,6 +14,7 @@ class CharacterGridContainer extends Component {
       isLoaded: false,
       apiURL: 'https://rickandmortyapi.com/api/character/?page=2',
       apiURLnext: null,
+      apiURLprev: null,
       dataInfo: [],
       characters: [],
       selectedCharacter: [],
@@ -26,9 +27,16 @@ class CharacterGridContainer extends Component {
   }
   
   componentDidUpdate () {
-    if (this.state.apiURLnext === this.state.dataInfo.next) {
-      console.log('next');
-      this.apiFetch(this.state.apiURLnext)}
+    if (this.state.apiURLnext === this.state.dataInfo.next){
+      const apiURL = this.state.apiURLnext;
+      this.state.apiURLnext = null;
+      this.apiFetch(apiURL)
+      }
+    else if (this.state.apiURLprev === this.state.dataInfo.prev){
+      const apiURL = this.state.apiURLprev;
+      this.state.apiURLprev = null;
+      this.apiFetch(apiURL)
+    }
   }
 
   apiFetch = ( apiURL ) => {
@@ -70,22 +78,27 @@ class CharacterGridContainer extends Component {
     }
     
     render() {
+/*    //try useEffect insted of mount/update   
+      const [apiURL, apiURLnext] = useState(0);
+      useEffect(() => {
+        this.apiFetch(this.state.apiURL)
+      }) */
+      //if there are errors with api request:
       const { error, isLoaded } = this.state;
-      console.log(this.state.dataInfo);
       if ( error ) {
         return <div>Error: {error.message}</div>;
       } else if ( !isLoaded ) {
         return <div>Loading...</div>;
+
+      //if there are no errors with api request:
       } else {
           //render a map of characters from the state
           //and assign a click event to the div with an image
           const characters = this.state.characters.map((character) => {
-            //const genders = character.gender;
             return (
               <Character
                 image={character.image}
-                clicked={() => this.characterSelectedHandler(character.id, character)}
-            /> 
+                clicked={() => this.characterSelectedHandler(character.id, character)}/> 
             )
           }); 
           const gender = this.state.characters.map((character) => {
@@ -94,7 +107,11 @@ class CharacterGridContainer extends Component {
           const genderCounter = this.genderCounter(gender);
           return(
             <div>
-              <button onClick={() => this.setState({ apiURLnext: this.state.dataInfo.next })}>next</button>
+              {/* setState in another component? */}
+              <div>
+                <button onClick={() => this.setState({ apiURLprev: this.state.dataInfo.prev })}>prev</button>
+                <button onClick={() => this.setState({ apiURLnext: this.state.dataInfo.next })}>next</button>
+              </div>
               <Pagination info={this.state.dataInfo}/>
               <main id="main-content" className="content-main"> 
                 <div id="character-container">
