@@ -13,6 +13,7 @@ class CharacterGridContainer extends Component {
       error: null,
       isLoaded: false,
       apiURL: 'https://rickandmortyapi.com/api/character/?page=2',
+      apiURLnext: null,
       dataInfo: [],
       characters: [],
       selectedCharacter: [],
@@ -21,28 +22,38 @@ class CharacterGridContainer extends Component {
   }
 
   componentDidMount () {
-    fetch(this.state.apiURL)
-        .then(
-          //call the json function and return a promise
-         ( response ) => response.json())
-        .then(
-          ( result )=> {
-            //console.log(result);
-            const characters = result.results;
-            const dataInfo = result.info;
-            this.setState({ 
-              characters: characters,
-              dataInfo: dataInfo,
-              isLoaded: true});
-          },
-            //handle API errors here to separate them from other bugs
-          ( error ) => {
-            this.setState({
-              isLoaded: true,
-              error
-            })
-        })
-    }
+    this.apiFetch(this.state.apiURL);
+  }
+  
+  componentDidUpdate () {
+    if (this.state.apiURLnext === this.state.dataInfo.next) {
+      console.log('next');
+      this.apiFetch(this.state.apiURLnext)}
+  }
+
+  apiFetch = ( apiURL ) => {
+    fetch(apiURL)
+      .then(
+        //call the json function and return a promise
+        ( response ) => response.json())
+      .then(
+        ( result )=> {
+          //console.log(result);
+          const characters = result.results;
+          const dataInfo = result.info;
+          this.setState({ 
+            characters: characters,
+            dataInfo: dataInfo,
+            isLoaded: true});
+        },
+          //handle API errors here to separate them from other bugs
+        ( error ) => {
+          this.setState({
+            isLoaded: true,
+            error
+          })
+      })
+  }
 
     characterSelectedHandler = ( id, character ) => {
       console.log(id, character);
@@ -83,6 +94,7 @@ class CharacterGridContainer extends Component {
           const genderCounter = this.genderCounter(gender);
           return(
             <div>
+              <button onClick={() => this.setState({ apiURLnext: this.state.dataInfo.next })}>next</button>
               <Pagination info={this.state.dataInfo}/>
               <main id="main-content" className="content-main"> 
                 <div id="character-container">
