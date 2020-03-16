@@ -13,6 +13,7 @@ class CharacterGridContainer extends Component {
       isLoaded: false,
       apiURLbase: 'https://rickandmortyapi.com/api/character/',
       apiURL: 'https://rickandmortyapi.com/api/character/?page=1',
+      apiURLsearch: null,
       apiURLnext: null,
       apiURLprev: null,
       dataInfo: [],
@@ -35,18 +36,22 @@ class CharacterGridContainer extends Component {
         (result)=> {
           const characters = result.results;
           const dataInfo = result.info;
-          //modify the received data for the first and the last page (25) of api results
+          //modify the received data for the first and the last page of api results
           //to correctly update next and previous buttons
-          if (dataInfo.prev === '') {dataInfo.prev = 'https://rickandmortyapi.com/api/character/?page=25'};
-          if (dataInfo.next ==='') {dataInfo.next = 'https://rickandmortyapi.com/api/character/?page=1'};
+          if (dataInfo.prev === '') {dataInfo.prev = this.state.apiURLbase+'?page='+dataInfo.pages};
+          if (dataInfo.next ==='') {dataInfo.next = this.state.apiURLbase+'?page=1'};
           //add the current page address to the data
           dataInfo.current = apiURL;
+          //create URL for search
+          const apiURLsearch = this.state.apiURLbase+'1,'+dataInfo.count;
           this.setState({ 
             characters: characters,
             dataInfo: dataInfo,
             isLoaded: true,
-            apiURL: apiURL
+            apiURL: apiURL,
+            apiURLsearch: apiURLsearch
           });
+          
         },
           //handle API errors here to separate them from other bugs
         (error) => {
@@ -74,13 +79,13 @@ class CharacterGridContainer extends Component {
     return counter;
   }
 
-  currentPageNumber = (apiURL) =>{
+  currentPageNumber = (apiURL) => {
     //use regular expression to get the number of the current page from the api address
     const pageNum = apiURL.match(/[0-9]+/g);
     return ' page '+ pageNum;
   }
-    
-    render() {
+  
+  render() {
 /*    //try useEffect insted of mount/update   
       const [apiURL, apiURLnext] = useState(0);
       useEffect(() => {
@@ -109,7 +114,7 @@ class CharacterGridContainer extends Component {
             <div>
               {/* is it possible in another component? */}
               <div className="pagination">
-                <button onClick={() => {this.apiFetch('https://rickandmortyapi.com/api/character/?page=1')}}>home</button>
+                <button onClick={() => {this.apiFetch(this.state.apiURLbase+'?page=1')}}>home</button>
                 <button onClick={() => this.apiFetch(this.state.dataInfo.prev)}>prev</button>
                 <span className="current-page">{this.currentPageNumber(this.state.dataInfo.current)}</span>
                 <button onClick={() => this.apiFetch(this.state.dataInfo.next)}>next</button>
