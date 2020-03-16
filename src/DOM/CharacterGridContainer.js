@@ -3,6 +3,7 @@ import Character from '../Components/Character/Character';
 import Pagination from './Pagination';
 import CharacterDetails from '../Components/CharacterDetails/CharacterDetails';
 import GenderGraph from '../Components/Graphs/GenderGraph';
+import character from '../Components/Character/Character';
 
 class CharacterGridContainer extends Component { 
   constructor(props){
@@ -46,7 +47,6 @@ class CharacterGridContainer extends Component {
         ( response ) => response.json())
       .then(
         ( result )=> {
-          //console.log(result);
           const characters = result.results;
           const dataInfo = result.info;
           this.setState({ 
@@ -64,12 +64,15 @@ class CharacterGridContainer extends Component {
   }
 
   characterSelectedHandler = ( id, character ) => {
-    console.log(id, character);
     this.setState({selectedCharacterId:id, selectedCharacter:character})
   }
 
-  genderCounter = ( gender ) => {
-  //count number of each gender
+  genderCounter = ( characters ) => {
+    //create a map object of characters genders
+    const gender = this.state.characters.map((character) => {
+      return character.gender
+    });
+    //count number of each gender
     let counter = {};
     gender.forEach(element => {
       counter[element] = (counter[element] || 0)+1; 
@@ -83,6 +86,7 @@ class CharacterGridContainer extends Component {
       useEffect(() => {
         this.apiFetch(this.state.apiURL)
       }) */
+
       //if there are errors with api request:
       const { error, isLoaded } = this.state;
       if ( error ) {
@@ -101,10 +105,7 @@ class CharacterGridContainer extends Component {
                 clicked={() => this.characterSelectedHandler(character.id, character)}/> 
             )
           }); 
-          const gender = this.state.characters.map((character) => {
-            return character.gender
-          });
-          const genderCounter = this.genderCounter(gender);
+          console.log("characters",characters)
           return(
             <div>
               {/* setState in another component? */}
@@ -125,7 +126,7 @@ class CharacterGridContainer extends Component {
                       id={this.state.selectedCharacterId}
                       character={this.state.selectedCharacter}/>
                   </div> 
-                  <GenderGraph counts={genderCounter}/>   
+                  <GenderGraph counts={this.genderCounter(characters)}/>   
                 </div>
               </main>
             </div>
