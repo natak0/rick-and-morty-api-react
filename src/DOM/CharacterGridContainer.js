@@ -1,6 +1,5 @@
 import React, { Component, useState, useEffect } from 'react';
 import Character from '../Components/Character/Character';
-import Pagination from './Pagination';
 import CharacterDetails from '../Components/CharacterDetails/CharacterDetails';
 import GenderGraph from '../Components/Graphs/GenderGraph';
 
@@ -25,21 +24,6 @@ class CharacterGridContainer extends Component {
   componentDidMount () {
     this.apiFetch(this.state.apiURL);
   }
-  
-  componentDidUpdate () {
-    if (this.state.apiURLnext === this.state.dataInfo.next){
-      //this.setState({apiURL:this.state.apiURLnext});
-      const apiURL = this.state.apiURLnext;
-      this.setState({apiURLnext: null});
-      this.apiFetch(apiURL);
-    }
-    else if (this.state.apiURLprev === this.state.dataInfo.prev){
-      //this.setState({apiURL:this.state.apiURLprev});
-      const apiURL = this.state.apiURLprev;
-      this.setState({apiURLprev: null});
-      this.apiFetch(apiURL);
-    }
-  }
 
   apiFetch = (apiURL) => {
     fetch(apiURL)
@@ -54,9 +38,8 @@ class CharacterGridContainer extends Component {
           //to correctly update next and previous buttons
           if (dataInfo.prev === '') {dataInfo.prev = 'https://rickandmortyapi.com/api/character/?page=25'};
           if (dataInfo.next ==='') {dataInfo.next = 'https://rickandmortyapi.com/api/character/?page=1'};
-          //add current page address to the data
+          //add the current page address to the data
           dataInfo.current = apiURL;
-          console.log(dataInfo)
           this.setState({ 
             characters: characters,
             dataInfo: dataInfo,
@@ -123,13 +106,11 @@ class CharacterGridContainer extends Component {
           }); 
           return(
             <div>
-              {/* setState in another component? */}
+              {/* is it possible in another component? */}
               <div className="pagination">
                 <button onClick={() => {this.apiFetch('https://rickandmortyapi.com/api/character/?page=1')}}>home</button>
-                {/* <button onClick={() => this.setState({ apiURLprev: this.state.dataInfo.prev })}>prev</button> */}
                 <button onClick={() => this.apiFetch(this.state.dataInfo.prev)}>prev</button>
                 <span className="current-page">{this.currentPageNumber(this.state.dataInfo.current)}</span>
-                {/* <button onClick={() => this.setState({ apiURLnext: this.state.dataInfo.next })}>next</button> */}
                 <button onClick={() => this.apiFetch(this.state.dataInfo.next)}>next</button>
               </div> 
               {/* <Pagination info={this.state.dataInfo}/> */}
