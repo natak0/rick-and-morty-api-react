@@ -11,6 +11,7 @@ class CharacterGridContainer extends Component {
     this.state = {
       error: null,
       isLoaded: false,
+      apiURLbase: 'https://rickandmortyapi.com/api/character/',
       apiURL: 'https://rickandmortyapi.com/api/character/?page=1',
       apiURLnext: null,
       apiURLprev: null,
