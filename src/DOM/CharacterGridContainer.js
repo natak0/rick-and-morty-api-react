@@ -3,7 +3,6 @@ import Character from '../Components/Character/Character';
 import Pagination from './Pagination';
 import CharacterDetails from '../Components/CharacterDetails/CharacterDetails';
 import GenderGraph from '../Components/Graphs/GenderGraph';
-import character from '../Components/Character/Character';
 
 class CharacterGridContainer extends Component { 
   constructor(props){
@@ -29,33 +28,44 @@ class CharacterGridContainer extends Component {
   
   componentDidUpdate () {
     if (this.state.apiURLnext === this.state.dataInfo.next){
+      //this.setState({apiURL:this.state.apiURLnext});
       const apiURL = this.state.apiURLnext;
-      this.state.apiURLnext = null;
-      this.apiFetch(apiURL)
-      }
+      this.setState({apiURLnext: null});
+      this.apiFetch(apiURL);
+    }
     else if (this.state.apiURLprev === this.state.dataInfo.prev){
+      //this.setState({apiURL:this.state.apiURLprev});
       const apiURL = this.state.apiURLprev;
-      this.state.apiURLprev = null;
-      this.apiFetch(apiURL)
+      this.setState({apiURLprev: null});
+      this.apiFetch(apiURL);
     }
   }
 
-  apiFetch = ( apiURL ) => {
+  apiFetch = (apiURL) => {
     fetch(apiURL)
       .then(
         //call the json function and return a promise
-        ( response ) => response.json())
+        (response) => response.json())
       .then(
-        ( result )=> {
+        (result)=> {
           const characters = result.results;
           const dataInfo = result.info;
+          //modify the received data for the first and the last page (25) of api results
+          //to correctly update next and previous buttons
+          if (dataInfo.prev === '') {dataInfo.prev = 'https://rickandmortyapi.com/api/character/?page=25'};
+          if (dataInfo.next ==='') {dataInfo.next = 'https://rickandmortyapi.com/api/character/?page=1'};
+          //add current page address to the data
+          dataInfo.current = apiURL;
+          console.log(dataInfo)
           this.setState({ 
             characters: characters,
             dataInfo: dataInfo,
-            isLoaded: true});
+            isLoaded: true,
+            apiURL: apiURL
+          });
         },
           //handle API errors here to separate them from other bugs
-        ( error ) => {
+        (error) => {
           this.setState({
             isLoaded: true,
             error
@@ -63,11 +73,11 @@ class CharacterGridContainer extends Component {
       })
   }
 
-  characterSelectedHandler = ( id, character ) => {
+  characterSelectedHandler = (id, character) => {
     this.setState({selectedCharacterId:id, selectedCharacter:character})
   }
 
-  genderCounter = ( characters ) => {
+  genderCounter = (characters) => {
     //create a map object of characters genders
     const gender = this.state.characters.map((character) => {
       return character.gender
@@ -79,6 +89,12 @@ class CharacterGridContainer extends Component {
     });
     return counter;
   }
+
+  currentPageNumber = (apiURL) =>{
+    //use regular expression to get the number of the current page from the api address
+    const pageNum = apiURL.match(/[0-9]+/g);
+    return ' page '+ pageNum;
+  }
     
     render() {
 /*    //try useEffect insted of mount/update   
@@ -88,10 +104,10 @@ class CharacterGridContainer extends Component {
       }) */
 
       //if there are errors with api request:
-      const { error, isLoaded } = this.state;
+      const {error, isLoaded} = this.state;
       if ( error ) {
         return <div>Error: {error.message}</div>;
-      } else if ( !isLoaded ) {
+      } else if (!isLoaded) {
         return <div>Loading...</div>;
 
       //if there are no errors with api request:
@@ -105,15 +121,18 @@ class CharacterGridContainer extends Component {
                 clicked={() => this.characterSelectedHandler(character.id, character)}/> 
             )
           }); 
-          console.log("characters",characters)
           return(
             <div>
               {/* setState in another component? */}
-              <div>
-                <button onClick={() => this.setState({ apiURLprev: this.state.dataInfo.prev })}>prev</button>
-                <button onClick={() => this.setState({ apiURLnext: this.state.dataInfo.next })}>next</button>
-              </div>
-              <Pagination info={this.state.dataInfo}/>
+              <div className="pagination">
+                <button onClick={() => {this.apiFetch('https://rickandmortyapi.com/api/character/?page=1')}}>home</button>
+                {/* <button onClick={() => this.setState({ apiURLprev: this.state.dataInfo.prev })}>prev</button> */}
+                <button onClick={() => this.apiFetch(this.state.dataInfo.prev)}>prev</button>
+                <span className="current-page">{this.currentPageNumber(this.state.dataInfo.current)}</span>
+                {/* <button onClick={() => this.setState({ apiURLnext: this.state.dataInfo.next })}>next</button> */}
+                <button onClick={() => this.apiFetch(this.state.dataInfo.next)}>next</button>
+              </div> 
+              {/* <Pagination info={this.state.dataInfo}/> */}
               <main id="main-content" className="content-main"> 
                 <div id="character-container">
                   <section id="character-container-grid">
