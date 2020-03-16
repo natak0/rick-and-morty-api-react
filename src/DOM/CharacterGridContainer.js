@@ -12,7 +12,7 @@ class CharacterGridContainer extends Component {
     this.state = {
       error: null,
       isLoaded: false,
-      apiURL: 'https://rickandmortyapi.com/api/character/?page=2',
+      apiURL: 'https://rickandmortyapi.com/api/character/?page=1',
       apiURLnext: null,
       apiURLprev: null,
       dataInfo: [],
@@ -63,19 +63,19 @@ class CharacterGridContainer extends Component {
       })
   }
 
-    characterSelectedHandler = ( id, character ) => {
-      console.log(id, character);
-      this.setState({selectedCharacterId:id, selectedCharacter:character})
-    }
+  characterSelectedHandler = ( id, character ) => {
+    console.log(id, character);
+    this.setState({selectedCharacterId:id, selectedCharacter:character})
+  }
 
-    genderCounter = ( gender ) => {
-    //count number of each gender
-      let counter = {};
-      gender.forEach(element => {
-        counter[element] = (counter[element] || 0)+1; 
-      });
-      return counter;
-    }
+  genderCounter = ( gender ) => {
+  //count number of each gender
+    let counter = {};
+    gender.forEach(element => {
+      counter[element] = (counter[element] || 0)+1; 
+    });
+    return counter;
+  }
     
     render() {
 /*    //try useEffect insted of mount/update   
