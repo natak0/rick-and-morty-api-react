@@ -154,14 +154,14 @@ header#main-header{
 	height: auto;
 }
 .character-grid {
-    display: block;
+  display: block;
 	width: auto;
 }
 .character-poster{
 	height: auto;
 }
 #character-container {
-    margin: auto;
+  margin: auto;
 }
 }
 

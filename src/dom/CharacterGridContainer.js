@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from 'react';
 import Character from '../Components/Character/Character';
 import CharacterDetails from '../Components/CharacterDetails/CharacterDetails';
 import GenderGraph from '../Components/Graphs/GenderGraph';
+import Search from '../Components/Search/Search';
 
 class CharacterGridContainer extends Component { 
   constructor(props){
@@ -66,6 +67,13 @@ class CharacterGridContainer extends Component {
     this.setState({selectedCharacterId:id, selectedCharacter:character})
   }
 
+  searchHandler = (name) =>{
+    let newUrl=this.state.apiURLbase+'?name='+name;
+    console.log(" url "+newUrl)
+    this.setState({apiURL:this.state.apiURLbase+'?name='+name})
+    this.apiFetch(newUrl)
+  }
+
   genderCounter = (characters) => {
     //create a map object of characters genders
     const gender = this.state.characters.map((character) => {
@@ -79,10 +87,13 @@ class CharacterGridContainer extends Component {
     return counter;
   }
 
-  currentPageNumber = (apiURL) => {
+  currentPageNumber = (apiURL, pages) => {
     //use regular expression to get the number of the current page from the api address
-    const pageNum = apiURL.match(/[0-9]+/g);
-    return ' page '+ pageNum;
+    let pageNum = apiURL.match(/[0-9]+/g); 
+    if (pageNum === null) {
+      pageNum = 1;
+    }
+    return ' page '+ pageNum+'/'+pages;
   }
   
   render() {
@@ -114,11 +125,15 @@ class CharacterGridContainer extends Component {
             <div>
               {/* is it possible in another component? */}
               <div className="pagination">
-                <button onClick={() => {this.apiFetch(this.state.apiURLbase+'?page=1')}}>home</button>
-                <button onClick={() => this.apiFetch(this.state.dataInfo.prev)}>prev</button>
-                <span className="current-page">{this.currentPageNumber(this.state.dataInfo.current)}</span>
-                <button onClick={() => this.apiFetch(this.state.dataInfo.next)}>next</button>
+                <div>
+                  <button onClick={() => {this.apiFetch(this.state.apiURLbase+'?page=1')}}>home</button>
+                  <button onClick={() => this.apiFetch(this.state.dataInfo.prev)}>prev</button>
+                  <span className="current-page">{this.currentPageNumber(this.state.dataInfo.current, this.state.dataInfo.pages)}</span>
+                  <button onClick={() => this.apiFetch(this.state.dataInfo.next)}>next</button>
+                </div>
+                  <Search searchHandler={() => this.searchHandler}/>
               </div> 
+              
               {/* <Pagination info={this.state.dataInfo}/> */}
               <main id="main-content" className="content-main"> 
                 <div id="character-container">
