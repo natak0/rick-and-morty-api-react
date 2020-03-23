@@ -19,8 +19,7 @@ class CharacterGridContainer extends Component {
       apiURLprev: null,
       dataInfo: [], 
       characters: [],
-      selectedCharacter: [],
-      selectedCharacterId: null
+      selectedCharacter: []
     }
   }
 
@@ -72,8 +71,8 @@ class CharacterGridContainer extends Component {
       })
   }
 
-  characterSelectedHandler = (id, character) => {
-    this.setState({selectedCharacterId:id, selectedCharacter:character});
+  characterSelectedHandler = (character) => {
+    this.setState({selectedCharacter:character});
   }
 
   searchHandler = (name) =>{
@@ -117,7 +116,7 @@ class CharacterGridContainer extends Component {
               <Character
                 image={character.image}
                 selected={this.state.selectedCharacter.id===character.id?true:false}
-                clicked={() => this.characterSelectedHandler(character.id, character)}/> 
+                clicked={() => this.characterSelectedHandler(character)}/> 
             )
           }); 
           return(

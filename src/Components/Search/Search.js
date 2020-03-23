@@ -15,8 +15,6 @@ const Search = (props) => {
 
   return(
     <div className="nav-top-form-search" role="search" >
-      
-      {/* <label htmlFor="api-search">Search for character: </label> */}
       <input 
         type="search"
         className="input-field-search"

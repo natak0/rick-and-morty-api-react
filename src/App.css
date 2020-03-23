@@ -154,7 +154,8 @@ h1{
 }
 .nav-top__pagination {
   color: gray;
-  display: inline-block;
+	display: flex;
+	justify-content: center;
   text-decoration: none;
 }
 .nav-top__pagination > *, .nav-top-form-search > *{
@@ -162,6 +163,7 @@ h1{
 }
 .nav-top__search{
 	display: flex;
+	margin: 0.2em
 }
 .nav-top-form-search{
 	display: flex;
