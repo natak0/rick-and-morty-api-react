@@ -5,8 +5,7 @@ const character = ( props ) => (
      <img 
             className="character-poster"
             src={props.image}
-            alt="character"
-            >
+            alt="character">
       </img>
 </div>
 )

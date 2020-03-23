@@ -4,6 +4,7 @@ import CharacterDetails from '../Components/CharacterDetails/CharacterDetails';
 import GenderGraph from '../Components/Graphs/GenderGraph';
 import Search from '../Components/Search/Search';
 
+
 class CharacterGridContainer extends Component { 
   constructor(props){
     //refer to the parent class constructor
@@ -17,7 +18,7 @@ class CharacterGridContainer extends Component {
       apiURLsearch: null,
       apiURLnext: null,
       apiURLprev: null,
-      dataInfo: [],
+      dataInfo: [], 
       characters: [],
       selectedCharacter: [],
       selectedCharacterId: null
@@ -35,27 +36,36 @@ class CharacterGridContainer extends Component {
         (response) => response.json())
       .then(
         (result)=> {
+          if(result.error){
+            this.setState({ 
+              error: result.error,
+              isLoaded: true,
+            });
+            return
+          }
           const characters = result.results;
           const dataInfo = result.info;
           //modify the received data for the first and the last page of api results
           //to correctly update next and previous buttons
-          if (dataInfo.prev === '') {dataInfo.prev = this.state.apiURLbase+'?page='+dataInfo.pages};
-          if (dataInfo.next ==='') {dataInfo.next = this.state.apiURLbase+'?page=1'};
+          /* if (dataInfo.prev === '') {dataInfo.prev = this.state.apiURLbase+'?page='+dataInfo.pages};
+          if (dataInfo.next === '') {dataInfo.next = this.state.apiURLbase+'?page=1'}; */
           //add the current page address to the data
           dataInfo.current = apiURL;
           //create URL for search
           const apiURLsearch = this.state.apiURLbase+'1,'+dataInfo.count;
           this.setState({ 
+            error:null,
             characters: characters,
+            selectedCharacter:characters[0],
             dataInfo: dataInfo,
             isLoaded: true,
             apiURL: apiURL,
             apiURLsearch: apiURLsearch
-          });
-          
+          });  
         },
           //handle API errors here to separate them from other bugs
         (error) => {
+          console.log('api error')
           this.setState({
             isLoaded: true,
             error
@@ -69,9 +79,7 @@ class CharacterGridContainer extends Component {
 
   searchHandler = (name) =>{
     let newUrl=this.state.apiURLbase+'?name='+name;
-    console.log(" url "+newUrl)
-    this.setState({apiURL:this.state.apiURLbase+'?name='+name})
-    this.apiFetch(newUrl)
+    this.apiFetch(newUrl);
   }
 
   genderCounter = (characters) => {
@@ -105,13 +113,10 @@ class CharacterGridContainer extends Component {
 
       //if there are errors with api request:
       const {error, isLoaded} = this.state;
-      if ( error ) {
-        return <div>Error: {error.message}</div>;
-      } else if (!isLoaded) {
+      if (!isLoaded) {
         return <div>Loading...</div>;
-
-      //if there are no errors with api request:
-      } else {
+      } 
+      else {
           //render a map of characters from the state
           //and assign a click event to the div with an image
           const characters = this.state.characters.map((character) => {
@@ -123,33 +128,34 @@ class CharacterGridContainer extends Component {
           }); 
           return(
             <div>
-              {/* is it possible in another component? */}
-              <div className="pagination">
+              <div className="nav-top__search">
+                <a role="button" aria-label="home" onClick={() => {this.apiFetch(this.state.apiURLbase+'?page=1')}}><span className="home-icon" ></span></a>
+                <Search searchHandler={() => this.searchHandler} error={error}/>
+              </div>
+              {( error )? (<div className="nav-top__results">No results</div>):
                 <div>
-                  <button onClick={() => {this.apiFetch(this.state.apiURLbase+'?page=1')}}>home</button>
-                  <button onClick={() => this.apiFetch(this.state.dataInfo.prev)}>prev</button>
-                  <span className="current-page">{this.currentPageNumber(this.state.dataInfo.current, this.state.dataInfo.pages)}</span>
-                  <button onClick={() => this.apiFetch(this.state.dataInfo.next)}>next</button>
+                    <div className="nav-top__pagination">
+                      <button disabled={!this.state.dataInfo.prev} onClick={() => this.apiFetch(this.state.dataInfo.prev)}>prev</button>
+                      <span className="current-page">{this.currentPageNumber(this.state.dataInfo.current, this.state.dataInfo.pages)}</span>
+                      <button disabled={!this.state.dataInfo.next} onClick={() => this.apiFetch(this.state.dataInfo.next)}>next</button>
+                    </div>
+                  <main id="main-content" className="content-main"> 
+                    <div id="character-container">
+                      <section id="character-container-grid">
+                        {characters}
+                      </section> 
+                    </div>
+                    <div className="sidebar">
+                      <div className="details">
+                        <CharacterDetails 
+                          id={this.state.selectedCharacterId}
+                          character={this.state.selectedCharacter}/>
+                      </div> 
+                      <GenderGraph counts={this.genderCounter(characters)}/>   
+                    </div>
+                  </main>
                 </div>
-                  <Search searchHandler={() => this.searchHandler}/>
-              </div> 
-              
-              {/* <Pagination info={this.state.dataInfo}/> */}
-              <main id="main-content" className="content-main"> 
-                <div id="character-container">
-                  <section id="character-container-grid">
-                    {characters}
-                  </section> 
-                </div>
-                <div className="sidebar">
-                  <div className="details">
-                    <CharacterDetails 
-                      id={this.state.selectedCharacterId}
-                      character={this.state.selectedCharacter}/>
-                  </div> 
-                  <GenderGraph counts={this.genderCounter(characters)}/>   
-                </div>
-              </main>
+            }
             </div>
           )
         }

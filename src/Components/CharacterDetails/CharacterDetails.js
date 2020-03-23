@@ -12,13 +12,13 @@ class CharacterDetails extends Component {
     if ( this.props.character.id ){
       character = 
       <div className="character-details">
-        <h1>{this.props.character.name}</h1>
         <img 
             className="character-poster"
             id="character-poster"
             src={this.props.character.image}
             alt="character">
         </img>
+        <h1>{this.props.character.name}</h1>
         <p>Gender: {this.props.character.gender}</p>
         <p>Species: {this.props.character.species}</p>
         <p>Status: {this.props.character.status}</p>

@@ -4,10 +4,11 @@ html{
 body{
 	font-family: 'Poppins', sans-serif;
 	margin: 0 auto;
+	font-size: .9em;
 	}
 .site-wrapper {
-  	display: flex; 	
-  	flex-direction: column;
+  display: flex; 	
+  flex-direction: column;
 	position: relative;
 	min-height: 100vh;
 }
@@ -40,11 +41,31 @@ header#main-header{
 	background-color: #f1f1f1;
 	border-radius: 4px;}
 
-.logo{
-    font: bold 2em 'Rubik Mono One', sans-serif;
-    color: white;
-    padding-left: 0;
+h1{
+  font: bold 2em 'Rubik Mono One', sans-serif;
+  padding-left: 0;
 	text-decoration: none;
+}
+.header__logo{
+	color: white;
+	display: contents;
+}
+.home-icon{
+	background-size: 32px 32px;
+  border-radius: 50%;
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+  height: 32px;
+	width: 32px;
+	cursor: pointer;
+}
+.home-icon::before{
+	content: url('https://rickandmortyapi.com/api/character/avatar/2.jpeg');
+	display: inline-block;
+  transform: scale(.1);
+  transform-origin: left 0;
 }
 /*main content layout and sidebar*/
 #main-content{
@@ -60,7 +81,7 @@ header#main-header{
 /*character item container properties*/
 #character-container{
 	flex:6;
-	margin: auto 20px auto 20px;
+/* 	margin: auto 20px auto 20px; */
 }
 /*character item properties*/
 .character-grid{
@@ -74,7 +95,7 @@ header#main-header{
 	margin-right:7px;
 	color:black;
 }
-.character-grid:hover{
+.character-grid:hover, .character-grid:active{
 	border: solid darkgray 1px;
 	border-radius: 2px;
 	}
@@ -125,24 +146,48 @@ header#main-header{
 .details .rating{
 	margin-left:10px;
 }
-.pagination{
-	margin-left: 20px;
+.nav-top__pagination, .nav-top__search, .nav-top__results{
+	padding-left: 15px;
 }
-.pagination, .pagination a, .pagination span {
+.nav-top__pagination {
   color: gray;
-  padding: 0.1em;
   display: inline-block;
   text-decoration: none;
 }
-.pagination a:hover {
-  text-decoration: underline;
-  cursor:pointer;
+.nav-top__pagination > *, .nav-top-form-search > *{
+	margin: 0.2em
 }
-.pagination span{
-	color:darkgray;
+.nav-top__search{
+	display: flex;
 }
-.pagination #home::after{
-	content: "	|"
+.nav-top-form-search{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	box-sizing: border-box;
+	padding: 2px 4px;
+	border: 1px solid #333;
+	border-radius: 4px;
+	height: 31px;
+	width: 200px;
+	/* justify-content: space-between; */
+}
+.nav-top-form-search .icon-search{
+  fill: #333;
+}
+.nav-top-form-search .input-field-search{
+	flex: 1 1 100px;
+	border: 0;
+  outline: 0;
+  box-shadow: none;
+}
+.button-search{
+	height: 25px;
+	width: 25px;
+	border:none;
+}
+.nav-top__results{
+	text-align: center;
 }
 /* media queries */
 @media only screen and (max-width: 900px) {
