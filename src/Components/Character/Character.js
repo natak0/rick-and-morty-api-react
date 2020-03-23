@@ -1,7 +1,8 @@
 import React from 'react';
 
 const character = ( props ) => (
-<div className="character-grid" onClick={props.clicked}>
+//add selected class to the clicked element
+<div className={"character-grid "+(props.selected?"selected":"")} onClick={props.clicked}>
      <img 
             className="character-poster"
             src={props.image}

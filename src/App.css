@@ -95,10 +95,13 @@ h1{
 	margin-right:7px;
 	color:black;
 }
-.character-grid:hover, .character-grid:active{
+.character-grid:hover, .character-grid:active, .selected{
 	border: solid darkgray 1px;
 	border-radius: 2px;
 	}
+.selected{
+	border: solid darkgray 2px;
+}
 /*character detail properties*/
 .character-details{
 	width:auto;

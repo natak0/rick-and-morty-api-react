@@ -4,7 +4,6 @@ import CharacterDetails from '../Components/CharacterDetails/CharacterDetails';
 import GenderGraph from '../Components/Graphs/GenderGraph';
 import Search from '../Components/Search/Search';
 
-
 class CharacterGridContainer extends Component { 
   constructor(props){
     //refer to the parent class constructor
@@ -74,7 +73,7 @@ class CharacterGridContainer extends Component {
   }
 
   characterSelectedHandler = (id, character) => {
-    this.setState({selectedCharacterId:id, selectedCharacter:character})
+    this.setState({selectedCharacterId:id, selectedCharacter:character});
   }
 
   searchHandler = (name) =>{
@@ -105,24 +104,19 @@ class CharacterGridContainer extends Component {
   }
   
   render() {
-/*    //try useEffect insted of mount/update   
-      const [apiURL, apiURLnext] = useState(0);
-      useEffect(() => {
-        this.apiFetch(this.state.apiURL)
-      }) */
-
-      //if there are errors with api request:
       const {error, isLoaded} = this.state;
       if (!isLoaded) {
         return <div>Loading...</div>;
       } 
       else {
           //render a map of characters from the state
-          //and assign a click event to the div with an image
+          //add selected boolean to clicked element
+          //assign a click event to the div with an image
           const characters = this.state.characters.map((character) => {
             return (
               <Character
                 image={character.image}
+                selected={this.state.selectedCharacter.id===character.id?true:false}
                 clicked={() => this.characterSelectedHandler(character.id, character)}/> 
             )
           }); 
@@ -148,7 +142,6 @@ class CharacterGridContainer extends Component {
                     <div className="sidebar">
                       <div className="details">
                         <CharacterDetails 
-                          id={this.state.selectedCharacterId}
                           character={this.state.selectedCharacter}/>
                       </div> 
                       <GenderGraph counts={this.genderCounter(characters)}/>   
