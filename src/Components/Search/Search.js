@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const Search = (props) => {
   const [query, setQuery] = useState('');
-  const [handler,setHandler]=useState(props.searchHandler);
+  const [handler]=useState(props.searchHandler);
   const icon = 
     <svg 
       xmlns="http://www.w3.org/2000/svg" 

@@ -116,7 +116,8 @@ class CharacterGridContainer extends Component {
               <Character
                 image={character.image}
                 selected={this.state.selectedCharacter.id===character.id?true:false}
-                clicked={() => this.characterSelectedHandler(character)}/> 
+                clicked={() => this.characterSelectedHandler(character)}
+                character={character}/> 
             )
           }); 
           return(

@@ -102,6 +102,9 @@ h1{
 .selected{
 	border: solid darkgray 2px;
 }
+.character-details-media{
+	display: none;
+}
 /*character detail properties*/
 .character-details{
 	width:auto;
@@ -121,7 +124,7 @@ h1{
 .character-poster{
 	height: 200px;
 	margin-left: auto;
-    margin-right: auto;
+  margin-right: auto;
 }
 .character-details > .character-poster{
 	margin-bottom: 1em;
@@ -139,8 +142,8 @@ h1{
 	width: 100%;
 	height:2.5rem;
 	margin-bottom: auto;
-    justify-content: center;
-    position: absolute;
+  justify-content: center;
+  position: absolute;
 }
 /* details div properties */
 .details .character-poster{
@@ -212,6 +215,12 @@ header#main-header{
 }
 #character-container {
   margin: auto;
+}
+.character-details-media{
+	display: inline-block;
+}
+.character-details{
+	display:none;
 }
 }
 
