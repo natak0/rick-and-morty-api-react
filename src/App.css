@@ -102,16 +102,13 @@ h1{
 .selected{
 	border: solid darkgray 2px;
 }
-.character-details-media{
-	display: none;
-}
+
 /*character detail properties*/
 .character-details{
 	width:auto;
-	display: grid;
+	display: inline-block;;
 }
-.character-details > *{
-	display: block;
+.character {
 	grid-column: 1;
 	text-align: left;
 	padding: 0 10px 0px 10px;
@@ -128,6 +125,10 @@ h1{
 }
 .character-details > .character-poster{
 	margin-bottom: 1em;
+}
+/* hide description div */
+.character-grid > div > div:last-child{
+	display: none;
 }
 /* graph */
 .genderGraph{
@@ -216,11 +217,11 @@ header#main-header{
 #character-container {
   margin: auto;
 }
-.character-details-media{
-	display: inline-block;
+.character-grid.selected > div > div:last-child{
+  display: inline-block;
 }
-.character-details{
-	display:none;
+.details{
+	display: none;
 }
 }
 
