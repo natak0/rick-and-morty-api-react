@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 
-const CharacterDetails = (props) => (
+const CharacterDetails = (props) => {
+  
+  return props.character?(
+    //if the character was clicked, display details of the clicked character
+    //if ( props.character.id ){
       <div className="character-item">
         <img 
             className="character-poster"
@@ -16,6 +20,7 @@ const CharacterDetails = (props) => (
           <p>Location: {props.character.location.name}</p>
         </div>
       </div>
-)
+    //}
+):""}
 
 export default CharacterDetails;

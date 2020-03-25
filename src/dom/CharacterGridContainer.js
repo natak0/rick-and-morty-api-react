@@ -19,21 +19,16 @@ class CharacterGridContainer extends Component {
       apiURLprev: null,
       dataInfo: [], 
       characters: [],
-      selectedCharacter: []
+      selectedCharacter: null
     }
   }
 
   componentDidMount () {
-    this.setState({
-      isLoaded: false
-    }, () => {
-      this.apiFetch(this.state.apiURL);
-    })
-    
+    this.apiFetch(this.state.apiURL);
   }
   apiFetch = (apiURL) => {
-    //this.setState({isLoaded:false});
-    fetch(apiURL)
+    this.setState({isLoaded:false},()=>{
+      fetch(apiURL)
       .then(
         //call the json function and return a promise
         (response) => response.json())
@@ -42,7 +37,7 @@ class CharacterGridContainer extends Component {
           if(result.error){
             this.setState({ 
               error: result.error,
-              isLoaded: true,
+              isLoaded: true
             });
             return
           }
@@ -66,14 +61,16 @@ class CharacterGridContainer extends Component {
             apiURLsearch: apiURLsearch
           });  
         },
-          //handle API errors here to separate them from other bugs
+        //handle API errors here to separate them from other bugs
         (error) => {
-          console.log('api error')
           this.setState({
             isLoaded: true,
             error
           })
-      })
+        }
+      )
+    });
+
   }
 
   characterSelectedHandler = (character) => {
@@ -98,22 +95,33 @@ class CharacterGridContainer extends Component {
     return counter;
   }
 
-  currentPageNumber = (apiURL, pages) => {
+  currentPageNumber = (url, pages) => {
+    if(!url){
+      return "0";
+    }
     //use regular expression to get the number of the current page from the api address
-    let pageNum = apiURL.match(/[0-9]+/g); 
+    let pageNum = url.match(/[0-9]+/g); 
     if (pageNum === null) {
       pageNum = 1;
     }
     return ' page '+ pageNum+'/'+pages;
   }
+  previousPage= () =>{
+    if(this.state.dataInfo && this.state.dataInfo.prev){
+    this.apiFetch(this.state.dataInfo.prev)
+    }
+  }
+  nextPage= () =>{
+    if(this.state.dataInfo && this.state.dataInfo.next){
+    this.apiFetch(this.state.dataInfo.next)
+    }
+  }
   
   render() {
       const {error, isLoaded} = this.state;
       console.log(error, isLoaded);
-      if (!isLoaded) {
-        return <div>Loading...</div>;
-      } 
-      
+     
+  
           //render a map of characters from the state
           //add selected boolean to clicked element
           //assign a click event to the div with an image
@@ -128,18 +136,17 @@ class CharacterGridContainer extends Component {
         }); 
         return(
           <div>
-            {( !isLoaded )? (<p>Loading...</p>):<p></p>}
             <div className="nav-top__search">
               <a role="button" aria-label="home" onClick={() => {this.apiFetch(this.state.apiURLbase+'?page=1')}}><span className="home-icon" ></span></a>
-              <Search searchHandler={() => this.searchHandler} error={error}/>
-              {console.log(error, isLoaded)}
+              <Search searchHandler={() => this.searchHandler}/>
+              {( !isLoaded )? (<p className="nav-top__error">Loading...</p>):<p> </p>}
             </div>
             {( error )? (<div className="nav-top__results">No results</div>):
               <div>
                   <div className="nav-top__pagination">
-                    <button disabled={!this.state.dataInfo.prev} onClick={() => this.apiFetch(this.state.dataInfo.prev)}>prev</button>
+                    <button disabled={!this.state.dataInfo.prev} onClick={() =>this.previousPage()}>prev</button>
                     <span className="current-page">{this.currentPageNumber(this.state.dataInfo.current, this.state.dataInfo.pages)}</span>
-                    <button disabled={!this.state.dataInfo.next} onClick={() => this.apiFetch(this.state.dataInfo.next)}>next</button>
+                    <button disabled={!this.state.dataInfo.next} onClick={() => this.nextPage()}>next</button>
                   </div>
                 <main id="main-content" className="content-main"> 
                   <div id="character-container">
@@ -149,8 +156,8 @@ class CharacterGridContainer extends Component {
                   </div>
                   <div className="sidebar">
                     <div className="details">
-                      <CharacterDetails 
-                        character={this.state.selectedCharacter}/>
+                      {(isLoaded)?(<CharacterDetails 
+                        character={this.state.selectedCharacter}/>):""}
                     </div> 
                       <GenderGraph counts={this.genderCounter(characters)}/>   
                   </div>
@@ -161,6 +168,5 @@ class CharacterGridContainer extends Component {
         )
       }
     }
-
 
 export default CharacterGridContainer;

@@ -126,7 +126,7 @@ h1{
 .character-details > .character-poster{
 	margin-bottom: 1em;
 }
-/* hide description div */
+/* hide description div {( !isLoaded )? (<p>Loading...</p>):<p></p>}.nav-top__pagination*/
 .character-grid > div > div:last-child{
 	display: none;
 }
@@ -153,7 +153,7 @@ h1{
 .details .rating{
 	margin-left:10px;
 }
-.nav-top__pagination, .nav-top__search, .nav-top__results{
+.nav-top__pagination, .nav-top__search, .nav-top__results, .nav-top__error{
 	padding-left: 15px;
 }
 .nav-top__pagination {
