@@ -82,18 +82,7 @@ class CharacterGridContainer extends Component {
     this.apiFetch(newUrl);
   }
 
-  genderCounter = (characters) => {
-    //create a map object of characters genders
-    const gender = this.state.characters.map((character) => {
-      return character.gender
-    });
-    //count number of each gender
-    let counter = {};
-    gender.forEach(element => {
-      counter[element] = (counter[element] || 0)+1; 
-    });
-    return counter;
-  }
+
 
   currentPageNumber = (url, pages) => {
     if(!url){
@@ -118,54 +107,54 @@ class CharacterGridContainer extends Component {
   }
   
   render() {
-      const {error, isLoaded} = this.state;
-      console.log(error, isLoaded);
-     
-  
+      const {error, isLoaded, characters} = this.state;
           //render a map of characters from the state
           //add selected boolean to clicked element
           //assign a click event to the div with an image
-        const characters = this.state.characters.map((character) => {
-          return (
-            <Character
-              image={character.image}
-              selected={this.state.selectedCharacter.id===character.id?true:false}
-              clicked={() => this.characterSelectedHandler(character)}
-              character={character}/> 
-          )
-        }); 
-        return(
-          <div>
-            <div className="nav-top__search">
-              <a role="button" aria-label="home" onClick={() => {this.apiFetch(this.state.apiURLbase+'?page=1')}}><span className="home-icon" ></span></a>
-              <Search searchHandler={() => this.searchHandler}/>
-              {( !isLoaded )? (<p className="nav-top__error">Loading...</p>):<p> </p>}
-            </div>
-            {( error )? (<div className="nav-top__results">No results</div>):
-              <div>
-                  <div className="nav-top__pagination">
-                    <button disabled={!this.state.dataInfo.prev} onClick={() =>this.previousPage()}>prev</button>
-                    <span className="current-page">{this.currentPageNumber(this.state.dataInfo.current, this.state.dataInfo.pages)}</span>
-                    <button disabled={!this.state.dataInfo.next} onClick={() => this.nextPage()}>next</button>
-                  </div>
-                <main id="main-content" className="content-main"> 
-                  <div id="character-container">
-                    <section id="character-container-grid">
-                      {characters}
-                    </section> 
-                  </div>
-                  <div className="sidebar">
-                    <div className="details">
-                      {(isLoaded)?(<CharacterDetails 
-                        character={this.state.selectedCharacter}/>):""}
-                    </div> 
-                      <GenderGraph counts={this.genderCounter(characters)}/>   
-                  </div>
-                </main>
-              </div>
-          }
-          </div>
+      const persons = characters.map((character) => {
+        return (
+          <Character
+            image={character.image}
+            selected={this.state.selectedCharacter.id===character.id?true:false}
+            clicked={() => this.characterSelectedHandler(character)}
+            character={character}/> 
         )
+        }); 
+        
+      return(
+        <div>
+          <div className="nav-top__search">
+            <a role="button" aria-label="home" onClick={() => {this.apiFetch(this.state.apiURLbase+'?page=1')}}><span className="home-icon" ></span></a>
+            <Search searchHandler={() => this.searchHandler}/>
+            {( !isLoaded )? (<p className="nav-top__error">Loading...</p>):<p> </p>}
+          </div>
+          {( error )? (<div className="nav-top__results">No results</div>):
+            <div>
+                <div className="nav-top__pagination">
+                  <button disabled={!this.state.dataInfo.prev} onClick={() =>this.previousPage()}>prev</button>
+                  <span className="current-page">{this.currentPageNumber(this.state.dataInfo.current, this.state.dataInfo.pages)}</span>
+                  <button disabled={!this.state.dataInfo.next} onClick={() => this.nextPage()}>next</button>
+                </div>
+              <main id="main-content" className="content-main"> 
+                <div id="character-container">
+                  <section id="character-container-grid">
+                    {persons}
+                  </section> 
+                </div>
+                <div className="sidebar">
+                  <div className="details">
+                    {(isLoaded)?(<CharacterDetails 
+                      character={this.state.selectedCharacter}/>):""}
+                  </div> 
+                    {/* <GenderGraph counts={this.genderCounter(characters)}/>  */} 
+                    {(isLoaded)?(<GenderGraph 
+                      characters={this.state.characters}/>):""} 
+                </div>
+              </main>
+            </div>
+        }
+        </div>
+      )
       }
     }
 
