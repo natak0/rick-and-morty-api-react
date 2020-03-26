@@ -1,4 +1,5 @@
 import React, { Component, useState, useEffect } from 'react';
+import Navigation from '../Components/Navigation/Navigation'
 import Character from '../Components/Character/Character';
 import CharacterDetails from '../Components/CharacterDetails/CharacterDetails';
 import GenderGraph from '../Components/Graphs/GenderGraph';
@@ -17,7 +18,7 @@ class CharacterGridContainer extends Component {
       apiURLsearch: null,
       apiURLnext: null,
       apiURLprev: null,
-      dataInfo: [], 
+      dataInfo: null, 
       characters: [],
       selectedCharacter: null
     }
@@ -43,10 +44,6 @@ class CharacterGridContainer extends Component {
           }
           const characters = result.results;
           const dataInfo = result.info;
-          //modify the received data for the first and the last page of api results
-          //to correctly update next and previous buttons
-          /* if (dataInfo.prev === '') {dataInfo.prev = this.state.apiURLbase+'?page='+dataInfo.pages};
-          if (dataInfo.next === '') {dataInfo.next = this.state.apiURLbase+'?page=1'}; */
           //add the current page address to the data
           dataInfo.current = apiURL;
           //create URL for search
@@ -70,7 +67,6 @@ class CharacterGridContainer extends Component {
         }
       )
     });
-
   }
 
   characterSelectedHandler = (character) => {
@@ -81,39 +77,16 @@ class CharacterGridContainer extends Component {
     let newUrl=this.state.apiURLbase+'?name='+name;
     this.apiFetch(newUrl);
   }
-
-
-
-  currentPageNumber = (url, pages) => {
-    if(!url){
-      return "0";
-    }
-    //use regular expression to get the number of the current page from the api address
-    let pageNum = url.match(/[0-9]+/g); 
-    if (pageNum === null) {
-      pageNum = 1;
-    }
-    return ' page '+ pageNum+'/'+pages;
-  }
-  previousPage= () =>{
-    if(this.state.dataInfo && this.state.dataInfo.prev){
-    this.apiFetch(this.state.dataInfo.prev)
-    }
-  }
-  nextPage= () =>{
-    if(this.state.dataInfo && this.state.dataInfo.next){
-    this.apiFetch(this.state.dataInfo.next)
-    }
-  }
   
   render() {
-      const {error, isLoaded, characters} = this.state;
-          //render a map of characters from the state
-          //add selected boolean to clicked element
-          //assign a click event to the div with an image
-      const persons = characters.map((character) => {
+      const {error, isLoaded, characters, dataInfo} = this.state;
+      //render a map of characters from the state
+      //add selected boolean to clicked element
+      //assign a click event to the div with an image
+      const persons = characters.map((character, key) => {
         return (
           <Character
+            key={character.id}
             image={character.image}
             selected={this.state.selectedCharacter.id===character.id?true:false}
             clicked={() => this.characterSelectedHandler(character)}
@@ -130,11 +103,7 @@ class CharacterGridContainer extends Component {
           </div>
           {( error )? (<div className="nav-top__results">No results</div>):
             <div>
-                <div className="nav-top__pagination">
-                  <button disabled={!this.state.dataInfo.prev} onClick={() =>this.previousPage()}>prev</button>
-                  <span className="current-page">{this.currentPageNumber(this.state.dataInfo.current, this.state.dataInfo.pages)}</span>
-                  <button disabled={!this.state.dataInfo.next} onClick={() => this.nextPage()}>next</button>
-                </div>
+              {(isLoaded)?(<Navigation dataInfo={dataInfo} apiFetch={this.apiFetch}/>):null}
               <main id="main-content" className="content-main"> 
                 <div id="character-container">
                   <section id="character-container-grid">

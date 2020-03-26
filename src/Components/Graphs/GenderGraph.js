@@ -33,6 +33,7 @@ const genderGraph = ({characters}) => {
         dataPoints: resultDataPoints
       }]
     } 
+    
     return (
       <div className="genderGraph">
         <CanvasJSChart options = {options} />
