@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Navigation = ({dataInfo, apiFetch}) => {
+const navigation = ({dataInfo, apiFetch}) => {
   if (dataInfo){
 
     const currentPageNumber = (url, pages) => {
@@ -20,7 +20,7 @@ const Navigation = ({dataInfo, apiFetch}) => {
       apiFetch(dataInfo.prev)
       }
     }
-    
+
     const nextPage= () =>{
       if(dataInfo && dataInfo.next){
       apiFetch(dataInfo.next)
@@ -41,4 +41,4 @@ const Navigation = ({dataInfo, apiFetch}) => {
   }
 }
 
-export default Navigation;
+export default navigation;

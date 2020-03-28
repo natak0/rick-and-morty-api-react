@@ -97,7 +97,7 @@ class CharacterGridContainer extends Component {
       return(
         <div>
           <div className="nav-top__search">
-            <a role="button" aria-label="home" onClick={() => {this.apiFetch(this.state.apiURLbase+'?page=1')}}><span className="home-icon" ></span></a>
+            <a role="button" aria-label="home" href='#' onClick={() => {this.apiFetch(this.state.apiURLbase+'?page=1')}}><span className="home-icon" ></span></a>
             <Search searchHandler={() => this.searchHandler}/>
             {( !isLoaded )? (<p className="nav-top__error">Loading...</p>):<p> </p>}
           </div>
