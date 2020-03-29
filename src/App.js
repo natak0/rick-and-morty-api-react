@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Header from './dom/Header';
 import Footer from './dom/Footer';
-import CharacterGridContainer from './dom/CharacterGridContainer';
+import {CharacterGridContainer} from './dom/CharacterGridContainer';
 
 class App extends Component {
   render() {

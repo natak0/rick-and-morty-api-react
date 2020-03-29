@@ -5,106 +5,125 @@ import CharacterDetails from '../Components/CharacterDetails/CharacterDetails';
 import GenderGraph from '../Components/Graphs/GenderGraph';
 import Search from '../Components/Search/Search';
 
-class CharacterGridContainer extends Component { 
-  constructor(props){
-    //refer to the parent class constructor
-    super(props);
-    //use 'this' after parent call
-    this.state = {
+export const CharacterGridContainer = () => { 
+  const [error, setError] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+  const [urlBase] = useState('https://rickandmortyapi.com/api/character/');
+  const [url, setUrl] = useState('https://rickandmortyapi.com/api/character/?page=1');
+  const [urlSearch, setUrlSearch] = useState(null);
+  const [urlNext, setUrlNext] = useState(null);
+  const [urlPrev, setUrlPrev] = useState(null);
+  const [dataInfo, setDataInfo] = useState(null);
+  const [characters, setCharacters] = useState([]);
+  const [selectedCharacter, setSelectedCharacter] = useState([]);
+  /*     this.state = {
       error: null,
       isLoaded: false,
-      apiURLbase: 'https://rickandmortyapi.com/api/character/',
-      apiURL: 'https://rickandmortyapi.com/api/character/?page=1',
-      apiURLsearch: null,
+      urlbase: 'https://rickandmortyapi.com/api/character/',
+      url: 'https://rickandmortyapi.com/api/character/?page=,
+      urlsearch: null,
       apiURLnext: null,
       apiURLprev: null,
       dataInfo: null, 
       characters: [],
       selectedCharacter: null
-    }
-  }
-
+    } */
+  
+    useEffect(() => {
+      apiFetch(url)
+    }, [url]);
+/* 
   componentDidMount () {
     this.apiFetch(this.state.apiURL);
-  }
-  apiFetch = (apiURL) => {
-    this.setState({isLoaded:false},()=>{
-      fetch(apiURL)
-      .then(
+  } */
+  async function apiFetch(url) {
+     
+      const response = await fetch(url)       
+      .catch(err => {
+        setError(err); console.log('error', err)
+    });
+      const result = await response.json();
+      const errorFetch = await error;
+      
+      result.info.current = url;   
+      setCharacters(result.results);
+      setDataInfo(result.info);
+      setError(null);
+      setSelectedCharacter(characters[0]);
+      setLoaded(true);
+      setUrl(url);  
+    
+      
+      /* .then(
         //call the json function and return a promise
         (response) => response.json())
       .then(
         (result)=> {
+          console.log(result);
           if(result.error){
-            this.setState({ 
-              error: result.error,
-              isLoaded: true
-            });
-            return
+            setError(result.error);
+            setLoaded(true)
           }
-          const characters = result.results;
-          const dataInfo = result.info;
+            //return
+          //}
+          const persons = result.results;
+          const info = result.info;
           //add the current page address to the data
-          dataInfo.current = apiURL;
+          info.current = url;
+          setCharacters(persons);
+          setDataInfo(info);
+          console.log('characters', characters, persons, result)
+          
           //create URL for search
-          const apiURLsearch = this.state.apiURLbase+'1,'+dataInfo.count;
-          this.setState({ 
-            error:null,
-            characters: characters,
-            selectedCharacter:characters[0],
-            dataInfo: dataInfo,
-            isLoaded: true,
-            apiURL: apiURL,
-            apiURLsearch: apiURLsearch
-          });  
+          //setUrlSearch(urlBase+'1,'+info.count);
+          setError(null);
+          setSelectedCharacter(persons[0]);
+          setLoaded(true);
+          setUrl(url);  
         },
         //handle API errors here to separate them from other bugs
         (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          })
-        }
-      )
-    });
+          setLoaded(true)
+          setError(error)
+          }
+      ) */
+    //}
   }
 
-  characterSelectedHandler = (character) => {
-    this.setState({selectedCharacter:character});
-  }
-
-  searchHandler = (name) =>{
-    let newUrl=this.state.apiURLbase+'?name='+name;
-    this.apiFetch(newUrl);
+  const searchHandler = (name) =>{
+    let newUrl=urlBase+'?name='+name;
+    apiFetch(newUrl);
   }
   
-  render() {
-      const {error, isLoaded, characters, dataInfo} = this.state;
+  
+      
       //render a map of characters from the state
       //add selected boolean to clicked element
       //assign a click event to the div with an image
-      const persons = characters.map((character, key) => {
-        return (
-          <Character
-            key={character.id}
-            image={character.image}
-            selected={this.state.selectedCharacter.id===character.id?true:false}
-            clicked={() => this.characterSelectedHandler(character)}
-            character={character}/> 
-        )
-        }); 
+
+  const persons = (characters.map((character, key) => {
+    return (
+      <Character
+        key={character.id}
+        image={character.image}
+        selected={selectedCharacter===character?true:false}
+        clicked={() => setSelectedCharacter(character)}
+        character={character}/> 
+    )
+    })); 
         
       return(
         <div>
           <div className="nav-top__search">
-            <a role="button" aria-label="home" href='#' onClick={() => {this.apiFetch(this.state.apiURLbase+'?page=1')}}><span className="home-icon" ></span></a>
-            <Search searchHandler={() => this.searchHandler}/>
-            {( !isLoaded )? (<p className="nav-top__error">Loading...</p>):<p> </p>}
+            <a role="button" aria-label="home" href='#' onClick={() => {setUrl(urlBase+'?page=1')}}><span className="home-icon" ></span></a>
+            <Search searchHandler={() => searchHandler}/>
+            {( !loaded )? (<p className="nav-top__error">Loading...</p>):<p> </p>}
           </div>
           {( error )? (<div className="nav-top__results">No results</div>):
             <div>
-              {(isLoaded)?(<Navigation dataInfo={dataInfo} apiFetch={this.apiFetch}/>):null}
+              {(loaded)?(<Navigation dataInfo={dataInfo} apiFetch={apiFetch}/>):null}
               <main id="main-content" className="content-main"> 
+              {(characters&&loaded)?(<>
                 <div id="character-container">
                   <section id="character-container-grid">
                     {persons}
@@ -112,19 +131,19 @@ class CharacterGridContainer extends Component {
                 </div>
                 <div className="sidebar">
                   <div className="details">
-                    {(isLoaded)?(<CharacterDetails 
-                      character={this.state.selectedCharacter}/>):""}
+                    {(loaded)?(<CharacterDetails 
+                      character={selectedCharacter}/>):""}
                   </div> 
                     {/* <GenderGraph counts={this.genderCounter(characters)}/>  */} 
-                    {(isLoaded)?(<GenderGraph 
-                      characters={this.state.characters}/>):""} 
-                </div>
+                    {(loaded)?(<GenderGraph 
+                      characters={characters}/>):""} 
+                </div></>):null}
               </main>
             </div>
         }
         </div>
       )
-      }
-    }
+}
+    
 
-export default CharacterGridContainer;
+/* export default CharacterGridContainer; */
