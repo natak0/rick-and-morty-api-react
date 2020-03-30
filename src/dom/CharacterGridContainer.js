@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navigation from '../Components/Navigation/Navigation'
 import Character from '../Components/Character/Character';
 import CharacterDetails from '../Components/CharacterDetails/CharacterDetails';
@@ -9,7 +9,7 @@ export const CharacterGridContainer = () => {
   const [error, setError] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [urlBase] = useState('https://rickandmortyapi.com/api/character/');
-  const [url, setUrl] = useState('https://rickandmortyapi.com/api/character/?page=1');
+  const [url, setUrl] = useState(urlBase);
   const [dataInfo, setDataInfo] = useState(null);
   const [characters, setCharacters] = useState([]);
   const [selectedCharacter, setSelectedCharacter] = useState([]);
@@ -20,19 +20,19 @@ export const CharacterGridContainer = () => {
     setLoaded(false);
     const response = await fetch(url)       
       .catch(err => {
-        setError(err); console.log('error', error)
+        setError(true); 
       }); 
     console.log(response);
     if (response) {
       if(response.status >= 400 && response.status < 600) {
-        setError(response);
+        setError(true);
       } else {
         const result = await response.json();
         result.info.current = url;   
         setCharacters(result.results);
         setDataInfo(result.info);
+        setSelectedCharacter(result.results[0]);
         setError(null);
-        setSelectedCharacter(characters[0]);
         setLoaded(true);
         setUrl(url);}
       }  
@@ -59,9 +59,9 @@ export const CharacterGridContainer = () => {
     })); 
         
   return(
-    <div>
+    <>
       <div className="nav-top__search">
-        <a role="button" aria-label="home" href='#' onClick={() => {setUrl(urlBase+'?page=1')}}><span className="home-icon" ></span></a>
+        <a role="button" aria-label="home" onClick={() => {apiFetch(urlBase+'?page=1')}}><span className="home-icon" ></span></a>
         <Search searchHandler={() => searchHandler}/>
         {( !loaded )? (<p className="nav-top__error">Loading...</p>):<p> </p>}
       </div>
@@ -86,6 +86,6 @@ export const CharacterGridContainer = () => {
           </main>
         </div>
     }
-    </div>
+    </>
   )
 }
